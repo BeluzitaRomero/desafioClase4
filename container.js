@@ -39,7 +39,7 @@ class Container {
   async getById(number) {
     let showId = await this.getAll();
     if (!showId) return { error: "Producto no encontrado" };
-    let objectSelected = showId.find((obj) => String(obj.id) === number);
+    let objectSelected = showId.find((obj) => obj.id === Number(number));
     return objectSelected
       ? objectSelected
       : { error: "Producto no encontrado" };
@@ -68,7 +68,7 @@ class Container {
       return p.id == id;
     });
 
-    if (index !== undefined) {
+    if (index >= 0) {
       arr[index].title = product.title;
       arr[index].price = product.price;
       arr[index].thumbnail = product.thumbnail;
