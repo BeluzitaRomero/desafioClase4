@@ -67,12 +67,11 @@ class Container {
     const index = arr.findIndex((p) => {
       return p.id == id;
     });
-    console.log(index, "este es find");
+
     if (index !== undefined) {
       arr[index].title = product.title;
       arr[index].price = product.price;
       arr[index].thumbnail = product.thumbnail;
-      console.log("array actualizado:", arr);
 
       await fs.writeFile(this.file, JSON.stringify(arr));
       return { data: "Producto actualizado" };
