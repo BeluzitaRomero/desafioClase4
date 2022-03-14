@@ -26,32 +26,59 @@ class Container {
       product.id = 1;
       arrayProducts.push(product);
       await fs.writeFile(this.file, JSON.stringify(arrayProducts));
-      return product.id;
+      return product;
     }
     let id = arrayProducts.map((p) => p.id);
     let maxId = Math.max(...id);
     const saveProduct = { ...product, id: maxId + 1 };
     await arrayProducts.push(saveProduct);
     await fs.writeFile(this.file, JSON.stringify(arrayProducts));
-    return saveProduct.id;
+    return saveProduct;
   }
 
   async getById(number) {
     let showId = await this.getAll();
-    if (!showId) return null;
-    let objectSelected = showId.find((obj) => obj.id === number);
-    return objectSelected ? objectSelected : null;
+    if (!showId) return { error: "Producto no encontrado" };
+    let objectSelected = showId.find((obj) => String(obj.id) === number);
+    return objectSelected
+      ? objectSelected
+      : { error: "Producto no encontrado" };
   }
 
   async deleteById(id) {
     const arrayProducts = await this.getAll();
     if (!arrayProducts) return;
-    const updateArray = arrayProducts.filter((obj) => obj.id !== id);
-    await fs.writeFile(this.file, JSON.stringify(updateArray));
+    const isIn = arrayProducts.find((prod) => prod.id === Number(id));
+    if (isIn) {
+      const updateArray = arrayProducts.filter((obj) => obj.id != id);
+      await fs.writeFile(this.file, JSON.stringify(updateArray));
+      return { data: "Producto eliminado" };
+    } else {
+      return { data: "No existe el producto que desea eliminar" };
+    }
   }
 
   async deleteAll() {
     await fs.writeFile(this.file, "[]");
+  }
+
+  async updateProduct(product, id) {
+    const arr = await this.getAll();
+    const index = arr.findIndex((p) => {
+      return p.id == id;
+    });
+    console.log(index, "este es find");
+    if (index !== undefined) {
+      arr[index].title = product.title;
+      arr[index].price = product.price;
+      arr[index].thumbnail = product.thumbnail;
+      console.log("array actualizado:", arr);
+
+      await fs.writeFile(this.file, JSON.stringify(arr));
+      return { data: "Producto actualizado" };
+    } else {
+      return { data: "No se pudo actualizar" };
+    }
   }
 }
 
