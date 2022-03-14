@@ -80,6 +80,13 @@ class Container {
       return { data: "No se pudo actualizar" };
     }
   }
+
+  async addProduct(product) {
+    const arr = await this.getAll();
+    arr.push(product);
+    await fs.writeFile(this.file, JSON.stringify(arr));
+    return { data: "Producto agregado" };
+  }
 }
 
 module.exports = Container;
