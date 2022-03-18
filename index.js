@@ -1,10 +1,11 @@
 const express = require("express");
-const Container = require("./Container");
-const container = new Container("products.json");
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+const Container = require("./Container");
+const container = new Container("products.json");
 
 const productsRouter = require("./src/routes/productRouter");
 
