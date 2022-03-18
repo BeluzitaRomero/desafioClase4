@@ -1,0 +1,19 @@
+<section class="d-flex flex-column align-items-center">
+  <div class="d-flex flex-row bd-highlight justify-content-center flex-wrap">
+    {{#each data}}
+      <div class="card mx-3 my-3" style="width: 18rem;">
+        <img src={{this.thumbnail}} class="card-img-top" alt="..." />
+        <div class="card-body">
+          <h5 class="card-title">{{this.title}}</h5>
+          <p class="card-text">${{this.price}}</p>
+          <a href="#" class="btn btn-primary">Detalles</a>
+        </div>
+      </div>
+    {{/each}}
+  </div>
+  <a href="/"><input
+      type="button"
+      class="btn btn-primary"
+      value="Cargar productos"
+    /></a>
+</section>
