@@ -2,10 +2,23 @@
 <html lang="en">
   <%- include("templates/head") %>
   <body>
-    <h1>Hola, soy <%= name %></h1>
+    <h1>Cargar productos</h1>
 
-    <% if(admin){ %>
-    <h1>Soy admin</h1>
-    <%}%>
+    <form action="/products" method="post">
+        <div class="mb-3">
+          <label for="product" class="form-label">Producto</label>
+          <input type="text" name="title" class="form-control" id="product" placeholder="Nombre de producto">
+        </div>
+        <div class="mb-3">
+          <label for="price" class="form-label">Precio</label>
+          <input type="number" name="number" class="form-control" id="price" placeholder="0000">
+        </div>
+        <div class="mb-3">
+          <label for="thumbnail" class="form-label">Imagen URL</label>
+          <input type="text" name="text" class="form-control" id="thumbnail">
+        </div>
+        <button type="submit" class="btn btn-primary">Enviar</button>
+      </form>
+      <a href="/products" class="btn btn-primary">Ver productos</a>
   </body>
 </html>
