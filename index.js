@@ -7,6 +7,9 @@ app.use(express.urlencoded({ extended: false }));
 const Container = require("./Container");
 const container = new Container("products.json");
 
+app.set("views", "./src/views");
+app.set("view engine", "pug");
+
 const productsRouter = require("./src/routes/productRouter");
 
 //Routes
@@ -15,17 +18,21 @@ app.use("/api/products", productsRouter);
 //Estaticos
 app.use("/static", express.static(__dirname + "/public"));
 
-app.get("/form", (req, res) => {
+app.get("/", (req, res) => {
   res.sendFile(__dirname + "/public/index.html");
 });
+app.get("/products", async (req, res) => {
+  res.render("products", { data: await container.getAll() });
+});
 
-app.post("/", async (req, res) => {
+app.post("/products", async (req, res) => {
   const newProduct = {
     title: req.body.title,
     price: Number(req.body.price),
     thumbnail: req.body.thumbnail,
   };
-  res.json(await container.addProduct(newProduct));
+  await container.save(newProduct);
+  res.sendFile(__dirname + "/public/index.html");
 });
 
 const port = 8081;
