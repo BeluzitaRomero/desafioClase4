@@ -19,7 +19,7 @@ app.use("/api/products", productsRouter);
 app.use("/static", express.static(__dirname + "/public"));
 
 app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/public/index.html");
+  res.render("index");
 });
 app.get("/products", async (req, res) => {
   res.render("products", { data: await container.getAll() });
@@ -32,7 +32,7 @@ app.post("/products", async (req, res) => {
     thumbnail: req.body.thumbnail,
   };
   await container.save(newProduct);
-  res.sendFile(__dirname + "/public/index.html");
+  res.render("index");
 });
 
 const port = 8081;

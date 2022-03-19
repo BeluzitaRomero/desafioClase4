@@ -2,9 +2,15 @@
 html 
     head
         title="PUG"
-    body
-        div
-            ul 
-             each product in data 
-                li= product.title 
-            a(href="/")= "Volver a cargar productos"     
+        link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css")
+    body(style="background-color: gray")
+        section(class="container d-flex flex-column align-items-center")
+            div(class="container d-flex flex-row justify-content-center")
+                each product in data
+                    div(class="card my-3 mx-3" style="width: 18rem;")
+                        img(src=product.thumbnail class="card-img-top" alt="...")
+                        div(class="card-body")
+                        h5(class="card-title")=product.title
+                        p(class="card-text")=product.price
+                        a(href="#" class="btn btn-primary")= "Detalles"
+            a(href="/" class="btn btn-primary")= "Volver a cargar productos"     
