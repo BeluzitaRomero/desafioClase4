@@ -6,6 +6,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+app.set("view engine", "ejs");
+app.set("views", "src/views");
+
 const productsRouter = require("./src/routes/productRouter");
 
 //Routes
@@ -25,6 +28,15 @@ app.post("/", async (req, res) => {
     thumbnail: req.body.thumbnail,
   };
   res.json(await container.addProduct(newProduct));
+});
+
+//EJS
+app.get("/", (req, res) => {
+  res.render("index", { name: "Beluzita", admin: true });
+});
+
+app.get("/products", async (req, res) => {
+  res.render("products", { data: await container.getAll() });
 });
 
 const port = 8081;
