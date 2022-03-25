@@ -9,6 +9,15 @@ app.use(express.urlencoded({ extended: false }));
 app.set("view engine", "ejs");
 app.set("views", "src/views");
 
+const messages = [];
+
+//Servidor--------------------------CLASE6
+const http = require("http");
+const server = http.createServer(app);
+
+//Socket--------------------------------CLASE6-----
+const io = require("socket.io")(server);
+
 const productsRouter = require("./src/routes/productRouter");
 
 //Routes
@@ -18,7 +27,7 @@ app.use("/api/products", productsRouter);
 app.use("/static", express.static(__dirname + "/public"));
 
 app.get("/form", (req, res) => {
-  res.sendFile(__dirname + "/public/index.html");
+  res.sendFile(__dirname + "/public/form.html");
 });
 
 app.post("/products", async (req, res) => {
@@ -27,7 +36,7 @@ app.post("/products", async (req, res) => {
     price: Number(req.body.price),
     thumbnail: req.body.thumbnail,
   };
-  await container.save(newProduct)
+  await container.save(newProduct);
   res.render("index");
 });
 
@@ -40,8 +49,31 @@ app.get("/products", async (req, res) => {
   res.render("products", { data: await container.getAll() });
 });
 
+//WEBSOCKET---------------------------------------
+
+//PORDUCTOS----------------------------------------
+io.on("connection", async (socket) => {
+  console.log("cliente conectado");
+  socket.emit("msg_client", "Soy el back");
+
+  io.sockets.emit("sendProducts", await container.getAll());
+
+  socket.on("addProducts", async (data) => {
+    await container.save(data);
+    io.sockets.emit("sendProducts", await container.getAll());
+  });
+
+  //CHAT------------------------------------------
+  socket.on("sendMessage", (data) => {
+    messages.push(data);
+    console.log(data, "msg del back");
+
+    io.sockets.emit("messages_back", messages);
+  });
+});
+
 const port = 8081;
-const server = app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Server escuchando al puerto ${port}`);
 });
 
